@@ -6,7 +6,7 @@ import './Layout.css'
 const layout=(props)=>(
     // add Aux bcz jsx don't support more than one parent element
     <Aux> 
-        <div >Toolbar,sidebar,backdoor</div>
+        <div><p>Toolbar,sidebar,backdoor</p></div>
         <main className='Content'>
             {props.children}
         </main>

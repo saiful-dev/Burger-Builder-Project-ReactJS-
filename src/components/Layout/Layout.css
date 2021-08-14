@@ -1,7 +1,11 @@
 .Content{
     margin-top: 16px;
-    color: red;
+    color:black;
+    margin-left: 16px;
     
     
 }
-
+p{
+    color: darkblue;
+    font-weight: bold;
+}
