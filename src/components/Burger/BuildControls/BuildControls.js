@@ -12,7 +12,7 @@ const controls =[
 const buildControls=(props)=>(
 
     <div className='BuildControls'>
-        <p >Current Prince: {props.Price}</p>
+        <p ><strong>Current Prince: {props.Price}</strong></p>
 
         {controls.map(ctrl =>(
             <BuildControl 
@@ -23,8 +23,14 @@ const buildControls=(props)=>(
                 disabled={props.disabled[ctrl.type]} 
                                 //props.disabled means {salad: true, meat: false,...}
                                 // we just use ctrl.type for access disabledInfo
-                />
+                
+                                />
         ))}
+        <button 
+            className='OrderButton' 
+            disabled={!props.purchasAble}
+            onClick={props.ordered}
+            >ORDER NOW</button>
 
     </div>
 );
