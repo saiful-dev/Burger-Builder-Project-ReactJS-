@@ -2,11 +2,12 @@ import React from 'react';
 
 import Aux from '../../hoc/Aux'
 import './Layout.css'
+import Toolbar from '../Navigation/Toolbar/Toolbar'
 
 const layout=(props)=>(
     // add Aux bcz jsx don't support more than one parent element
     <Aux> 
-        <div><p>Toolbar,sidebar,backdoor</p></div>
+        <Toolbar/>
         <main className='Content'>
             {props.children}
         </main>
