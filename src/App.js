@@ -7,10 +7,23 @@ import './App.css';
 
 class App extends Component{
 
+  //state for unmount check
+  // just for check unmount work or not
+  // state={
+  //   show:true
+  // }
+  // componentDidMount(){
+  //   setTimeout(()=>{
+  //     this.setState({show: false});
+  //   },5000);
+  // }
   render(){
     return (
       <div className="App">
           <Layout>
+            {/*just for check unmount work or not
+            
+            {this.state.show?<BurgerBuilder/>:null} */} 
             <BurgerBuilder/>
           </Layout>
           

@@ -6,7 +6,8 @@ import Backdrop from '../Backdrop/Backdrop';
 
 class Modal extends Component{
     shouldComponentUpdate(nextProps,nextState){ //return false to tell React the update can be skipped
-        return nextProps.show !== this.props.show;
+        return nextProps.show !== this.props.show || nextProps.children !==this.props.children; 
+        //|| nextProps.children !==this.props.children;  for spinner 
     }
     componentDidUpdate(){
         console.log('[Modal] Will update')
