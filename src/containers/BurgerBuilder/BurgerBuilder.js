@@ -40,6 +40,7 @@ class Burgerbuilder extends Component{
     // fetch data from firebase
     //componentWillMount will call before the child component are rendered
     componentDidMount(){ // componenetdidmount call after child component rendered 
+        console.log(this.props);
         Axios.get('/ingredient.json')
                 .then(response =>{
                     this.setState({ingredient: response.data})
@@ -125,38 +126,48 @@ class Burgerbuilder extends Component{
 
     purchaseContinueHandler=()=>{
         //alert('You Continue');
-        this.setState({loading: true});
-        //Axios added
-        const order={
-            ingredients: this.state.ingredient,
-            price: this.state.totalPrice,
-            customer:{
-                name: 'MAx',
-                address:{
+        // this.setState({loading: true});
+        // //Axios added
+        // const order={
+        //     ingredients: this.state.ingredient,
+        //     price: this.state.totalPrice,
+        //     customer:{
+        //         name: 'MAx',
+        //         address:{
 
-                    street: " street 1",
-                    zipcode: '4343',
-                    country: 'Germany',
+        //             street: " street 1",
+        //             zipcode: '4343',
+        //             country: 'Germany',
 
-                },
-                email: 'test@gmail.com',
-            },
+        //         },
+        //         email: 'test@gmail.com',
+        //     },
 
-            deliveryMethod: 'fastest',
-        };
-        Axios.post('/orders.json',order)// we need add json for firebase
-            .then(response =>{
-                this.setState({loading: false, 
-                                purchasing: false,
-                });
+        //     deliveryMethod: 'fastest',
+        // };
+        // Axios.post('/orders.json',order)// we need add json for firebase
+        //     .then(response =>{
+        //         this.setState({loading: false, 
+        //                         purchasing: false,
+        //         });
 
-            })
+        //     })
                 
-            .catch(error => {
-                this.setState({loading: false,
-                    purchasing: false,
-                });
-            });
+        //     .catch(error => {
+        //         this.setState({loading: false,
+        //             purchasing: false,
+        //         });
+        //     });
+
+        const queryparams=[];
+        for(let i in this.state.ingredient){
+            queryparams.push(encodeURIComponent(i) + '=' +encodeURIComponent(this.state.ingredient[i]));
+        }
+        const queryString=queryparams.join('&');
+        this.props.history.push({
+            pathname:'/checkout',
+            search:'?'+queryString,
+        });
     }
 
 
