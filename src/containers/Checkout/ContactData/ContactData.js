@@ -75,10 +75,18 @@ OrderHandler=(event)=>{
 
 
      this.setState({loading: true});
+     const formData={}; //creation of empty object
+
+     for(let formElementIdentifer in this.state.OrderFrom){
+         formData[formElementIdentifer]= this.state.OrderFrom[formElementIdentifer].value;
+
+     }
+
         //Axios added
         const order={
             ingredients: this.props.ingredients,
             price: this.props.price,
+            orderData:formData,
             
         };
         Axios.post('/orders.json',order)// we need add json for firebase
@@ -117,7 +125,7 @@ render(){
     }
 
     let form=(
-        <form>
+        <form onSubmit={this.OrderHandler}>
 
             {
                 formElementArray.map(formElement=>(
@@ -135,7 +143,7 @@ render(){
             <Input inputtype="input" type="email" name="eame" placeholder="Your Mail"/>
             <Input inputtype="input" type="text" name="street" placeholder="Your street"/>
             <Input inputtype="input" type="text" name="postal" placeholder="postal code"/>  */}
-            <Button  btnType="Success" clicked={this.OrderHandler}>ORDER</Button>
+            <Button  btnType="Success">ORDER</Button>
             </form>
     );
     if(this.state.loading){
