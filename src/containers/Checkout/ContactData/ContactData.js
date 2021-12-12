@@ -6,6 +6,7 @@ import Axios from '../../../AxiosOrder';
 
 import Input from '../../../components/UI/Input/Input';
 import './ContactData.css';
+import { is } from '@babel/types';
 
 
 class ContactData extends Component{
@@ -19,7 +20,12 @@ state={
                 type:'text',
                 placeholder:'Your Name',
             },
-            value:''
+            value:'',
+            validation:{
+                required: true
+            },
+            valid: false,
+            touched:false,
         },
         street: {
             elementType: 'input',
@@ -27,7 +33,13 @@ state={
                 type:'text',
                 placeholder:'Street',
             },
-            value:''
+            value:'',
+            validation:{
+                required: true
+            },
+            valid: false,
+            touched:false,
+            
         },
         zipcode: {
             elementType: 'input',
@@ -35,7 +47,14 @@ state={
                 type:'text',
                 placeholder:'ZIPCODE',
             },
-            value:''
+            value:'',
+            validation:{
+                required: true,
+                minLength:5,
+                maxLength:5,
+            },
+            valid: false,
+            touched:false,
         },
         country: {
             elementType: 'input',
@@ -43,7 +62,12 @@ state={
                 type:'text',
                 placeholder:'Country',
             },
-            value:''
+            value:'',
+            validation:{
+                required: true
+            },
+            valid: false,
+            touched:false,
         },
         email: {
             elementType: 'input',
@@ -51,7 +75,12 @@ state={
                 type:'text',
                 placeholder:'E-mail',
             },
-            value:''
+            value:'',
+            validation:{
+                required: true
+            },
+            valid: false,
+            touched:false,
         },
         deliveryMethod: {
             elementType: 'select',
@@ -61,9 +90,13 @@ state={
                     {value:'cheapest', displayValue:'Cheapest'}
                 ]
             },
-            value:''
+            value:'fastest', //by default 
+            //validation:{}, //handling validation error
+            valid:true,
+
         },
     },
+    formIsValid:false,
     loading:false,
 
 }
@@ -100,6 +133,28 @@ OrderHandler=(event)=>{
                 this.setState({loading: false});
             });
 }
+
+checkValidity(value,rules){
+
+    let isValid=true;
+    if(!rules){ //for delivaryMethod error handle, bcz where we havn't validation rules
+        return true;
+    }
+    if(rules.required){
+        isValid=value.trim() !=='' && isValid; //trim removes empty space before and after
+    }
+    if(rules.minLength){
+        isValid=value.length >=  rules.minLength && isValid;
+    }
+    if(rules.maxLength){
+        isValid=value.length <=  rules.maxLength && isValid;
+    }
+
+    return isValid;
+
+}
+
+
 inputChangedHandler=(event,inputIdentifier)=>{// we update input field based on user input
     //console.log(event.target.value);
     const updatedOrderForm={ //just copy orderfrom object
@@ -110,8 +165,20 @@ inputChangedHandler=(event,inputIdentifier)=>{// we update input field based on 
             ...updatedOrderForm[inputIdentifier]
     }
     updatedFormElement.value=event.target.value;
+    //check validity
+    updatedFormElement.valid=this.checkValidity(updatedFormElement.value,updatedFormElement.validation);
+    updatedFormElement.touched=true;
+    // just see the effect 
+    console.log(updatedFormElement);
     updatedOrderForm[inputIdentifier]=updatedFormElement;
-    this.setState({OrderFrom:updatedOrderForm});
+    // just for check overall form validation
+    let formIsValid=true;
+    for(let inputIdentifier in updatedOrderForm){
+        formIsValid= updatedOrderForm[inputIdentifier].valid && formIsValid
+    }
+    
+    
+    this.setState({OrderFrom:updatedOrderForm, formIsValid: formIsValid});
 }
 
 render(){
@@ -134,6 +201,9 @@ render(){
                         elementType={formElement.config.elementType}
                         elementConfig={formElement.config.elementConfig}
                         value={formElement.config.value}
+                        invalid={!formElement.config.valid}
+                        shouldValidate={formElement.config.validation}
+                        touched={formElement.config.touched}
                         changed={(event)=>this.inputChangedHandler(event,formElement.id)}
                     />
                 ))
@@ -143,7 +213,7 @@ render(){
             <Input inputtype="input" type="email" name="eame" placeholder="Your Mail"/>
             <Input inputtype="input" type="text" name="street" placeholder="Your street"/>
             <Input inputtype="input" type="text" name="postal" placeholder="postal code"/>  */}
-            <Button  btnType="Success">ORDER</Button>
+            <Button  btnType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
             </form>
     );
     if(this.state.loading){
